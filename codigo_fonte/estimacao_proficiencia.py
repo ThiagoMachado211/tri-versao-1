@@ -2,33 +2,17 @@ import numpy as np
 
 
 def probabilidade_3pl(theta, a, b, c):
-    """
-    Calcula a probabilidade de acerto no modelo 3PL.
-
-    P(X = 1 | theta) = c + (1 - c) / (1 + exp(-a(theta - b)))
-    """
-
     theta = np.asarray(theta)
-
     return c + (1 - c) / (1 + np.exp(-a * (theta - b)))
 
 
-def criar_grid_theta(theta_min=-4, theta_max=4, n_pontos=41):
-    """
-    Cria uma grade de valores de theta para estimação EAP.
-    """
-
+def criar_grid_theta(theta_min=-4, theta_max=4, n_pontos=61):
     return np.linspace(theta_min, theta_max, n_pontos)
 
 
 def densidade_prior_normal(theta_grid):
-    """
-    Prior normal padrão N(0,1) para theta.
-    """
-
     prior = np.exp(-0.5 * theta_grid**2)
     prior = prior / prior.sum()
-
     return prior
 
 
@@ -79,7 +63,7 @@ def estimar_theta_eap(
     parametros_itens,
     theta_min=-4,
     theta_max=4,
-    n_pontos=41
+    n_pontos=61
 ):
     """
     Estima theta por EAP para todos os alunos.

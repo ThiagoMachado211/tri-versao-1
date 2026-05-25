@@ -26,6 +26,35 @@ def extrair_gabarito(df_gabarito: pd.DataFrame, colunas_itens: list[str]) -> pd.
 
 
 
+def filtrar_alunos_minimo_respostas(
+    df_respostas: pd.DataFrame,
+    colunas_itens: list[str],
+    minimo_respostas: int = 1
+) -> pd.DataFrame:
+    """
+    Remove alunos com poucas respostas válidas.
+    """
+
+    df = df_respostas.copy()
+
+    respostas_validas = ["a", "b", "c", "d", "e"]
+
+    contagem_validas = (
+        df[colunas_itens]
+        .isin(respostas_validas)
+        .sum(axis=1)
+    )
+
+    df["n_validas"] = contagem_validas
+
+    df_filtrado = df[df["n_validas"] >= minimo_respostas].copy()
+
+    df_filtrado = df_filtrado.drop(columns=["n_validas"])
+
+    return df_filtrado
+
+
+
 def corrigir_respostas(df_respostas: pd.DataFrame, gabarito: pd.Series, colunas_itens: list[str], coluna_id: str) -> pd.DataFrame:
   df = padronizar_respostas(df_respostas, colunas_itens)
   df_corrigido = pd.DataFrame()

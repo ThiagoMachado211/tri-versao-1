@@ -5,7 +5,7 @@ from pathlib import Path
 AREA = "CH"
 N_ITENS = 45
 SEED = 42
-TAMANHO_TESTE = 0.20
+TAMANHO_TESTE = 0.10
 
 
 
@@ -30,7 +30,7 @@ ARQUIVO_NOTAS = PASTA_BRUTOS / f"NOTAS_{AREA}.csv"
 
 
 # Colunas:
-COLUNA_ID = "insc"
+COLUNA_ID = "INSC"
 COLUNA_NOTA_REAL = "nota_tri"
 COLUNAS_ITENS = [f"Q{i}" for i in range(1, N_ITENS + 1)]
 
@@ -46,7 +46,7 @@ VALORES_AUSENTES = ["P", "R", "", " ", "NA", "NaN", None]
 # Configurações da TRI:
 THETA_MIN = -4
 THETA_MAX = 4
-N_PONTOS_QUADRATURA = 41
+N_PONTOS_QUADRATURA = 61
 
 
 

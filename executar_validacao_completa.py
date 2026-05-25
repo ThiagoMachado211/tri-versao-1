@@ -27,6 +27,7 @@ from codigo_fonte.pre_processamento import (
     extrair_gabarito,
     corrigir_respostas,
     gerar_matriz_respostas,
+    filtrar_alunos_minimo_respostas,
 )
 
 from codigo_fonte.modelo_tri_3pl import (
@@ -69,6 +70,17 @@ def main():
 
     gabarito = extrair_gabarito(df_gabarito, COLUNAS_ITENS)
 
+    print("Filtrando alunos com poucas respostas válidas...")
+    antes = len(df_respostas)
+    df_respostas = filtrar_alunos_minimo_respostas(
+        df_respostas=df_respostas,
+        colunas_itens=COLUNAS_ITENS,
+        minimo_respostas=1
+    )
+    depois = len(df_respostas)
+    print(f"Alunos removidos: {antes - depois}")
+    print(f"Alunos restantes: {depois}")
+
     print("Corrigindo respostas...")
 
     df_corrigido = corrigir_respostas(
@@ -86,7 +98,18 @@ def main():
         how="inner",
     )
 
-    df_base[COLUNA_NOTA_REAL] = df_base[COLUNA_NOTA_REAL].astype(float)
+    df_base[COLUNA_NOTA_REAL] = (
+        df_base[COLUNA_NOTA_REAL]
+        .astype(str)
+        .str.strip()
+        .str.replace(",", ".", regex=False)
+        .astype(float)
+    )
+
+    antes = len(df_base)
+    df_base = df_base.dropna(subset=[COLUNA_NOTA_REAL]).reset_index(drop=True)
+    depois = len(df_base)
+    print(f"Alunos removidos por nota ausente: {antes - depois}")
 
     print(f"Total de alunos usados: {len(df_base)}")
 
